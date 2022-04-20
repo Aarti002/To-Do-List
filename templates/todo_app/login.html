@@ -1,0 +1,108 @@
+<! DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Invoice Login
+ </title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+</head>
+<style>
+html {
+    height: 100%;
+}
+body {
+    height: 100%;
+}
+.global-container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f5f5f5;
+}
+form {
+    padding-top: 10px;
+    font-size: 14px;
+    margin-top: 30px;
+}
+.card-title {
+font-weight: 300;
+ }
+.btn {
+    font-size: 14px;
+    margin-top: 20px;
+}
+.login-form {
+    width: 330px;
+    margin: 20px;
+}
+.sign-up {
+    text-align: center;
+    padding: 20px 0 0;
+}
+.alert {
+    margin-bottom: -30px;
+    font-size: 13px;
+    margin-top: 20px;
+}
+</style>
+<body>
+<div class="pt-5">
+  <div class="global-container">
+    <div class="card login-form">
+    <div class="card-body">
+        <h3 class="card-title text-center"> Login to Access </h3>
+      <br>
+      <h4 class="card-title text-center"> To-Do List </h4>
+        <div class="card-text">
+            <form method="POST" action="{% url 'dologin' %}">
+
+                {% csrf_token %}
+              <div class="input-group mb-3">
+              <input type="email" class="form-control" placeholder="Email" name="email" id="email">
+              <div class="input-group-append">
+                <div class="input-group-text">
+                  <span class="fas fa-envelope"></span>
+                </div>
+              </div>
+            </div>
+            <div class="input-group mb-3">
+              <input type="password" class="form-control" placeholder="Password" name="password" id="password">
+              <div class="input-group-append">
+                <div class="input-group-text">
+                  <span class="fas fa-lock"></span>
+                </div>
+              </div>
+            </div>
+
+              <div class="col-12">
+            <button type="submit" class="btn btn-primary btn-block" >Sign In</button>
+          </div>
+
+
+    {% if messages %}
+    {% for message in messages %}
+
+    {% if message.tags == 'error' %}
+    <div class="alert alert-danger">
+    {{message}}
+    </div>
+    {% else %}
+    <div class="alert alert-{{message.tags}}">
+    {{message}}
+    </div>
+    {% endif %}
+
+    {% endfor %}
+    {% endif %}
+
+    </form>
+          <a href="{% url 'register_user' %}"><button class="w-100 btn btn-lg btn-primary" type="submit">New User?</button></a>
+
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</body>
+</html>

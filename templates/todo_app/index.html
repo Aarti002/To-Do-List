@@ -1,0 +1,110 @@
+{% extends 'base/base.html' %}
+{% block content %}
+
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+<div class="header-bar">
+    <a style="text-decoration: none; color: #e53935;" href="{% url 'logout_user' %}">Logout</a>
+
+</div>
+
+
+
+    <a style="text-decoration: none; color: #e53935;" href="{% url 'add_new_todo' %}">
+        <button type="button" class="btn btn-secondary btn-lg btn-block">Add New Task!</button></a>
+
+<div id="tasklist" class="task-items-wrapper">
+            <form role="form" action="/filter_todo" method="post">
+                  {% csrf_token %}
+                    <div class="form-group">
+                    <label>Filter By Date:</label>
+                    <select class="form-control" name="date">
+                        {% for d in all_todo_dates %}
+                        <option value="{{ d.date }}">{{ d.date }}</option>
+                        {% endfor %}
+                    </select>
+                  </div>
+                <div class="card-footer">
+                  <button class="btn btn btn-primary" type="submit">Apply</button>
+                </div>
+            </form>
+
+
+    <div class="card-body table-responsive p-0">
+                <table class="table table-hover text-nowrap">
+                  <thead>
+                    <tr>
+
+                      <th>To-Do</th>
+                        <th>Added On</th>
+                        <th>Remove</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for task in all_items %}
+                  <tr>
+
+                      {% if task.done %}
+                      <td><a href="/edit_todo_item/{{ task.id }}" style="text-decoration-line: line-through;">{{ task.todo }}</a></td>
+                      {% else %}
+                      <td><a href="/edit_todo_item/{{ task.id }}">{{ task.todo }} {{ task.id }}</a></td>
+                      {% endif %}
+                        <td>{{task.date}}</td>
+                      <td><a class="delete-link" href="/remove_todo/{{ task.id }}">&#215;</a></td>
+
+                  </tr>
+
+        {% empty %}
+        <div style="text-align: center; padding-bottom: 10px; line-height: 1em;">
+            <h3>No new tasks are created.</h3>
+
+        </div>
+                  {% endfor %}
+                  </tbody>
+                </table>
+
+
+    </div>
+
+{% if messages %}
+    {% for message in messages %}
+
+    {% if message.tags == 'error' %}
+    <div class="alert alert-danger">
+    {{message}}
+    </div>
+    {% else %}
+    <div class="alert alert-{{message.tags}}">
+    {{message}}
+    </div>
+    {% endif %}
+
+    {% endfor %}
+    {% endif %}
+</div>
+<script>
+    var taskList = document.getElementById("tasklist");
+    var reorderForm = document.getElementById("reorderForm");
+    var positionInput = document.getElementById("positionInput");
+
+    let sortable = Sortable.create(taskList, {
+        handle: '.handle',
+        ghostClass: 'dropArea',
+        chosenClass: 'selectedTask',
+
+    });
+
+    function reordering() {
+        const rows = document.getElementsByClassName("task-wrapper");
+        let pos = [];
+        for (let row of rows) {
+            pos.push(row.dataset.position);
+        }
+        console.log(pos.join(","))
+        positionInput.value = pos.join(',');
+        reorderForm.submit();
+    }
+
+    document.ondrop = reordering
+</script>
+
+{% endblock content %}

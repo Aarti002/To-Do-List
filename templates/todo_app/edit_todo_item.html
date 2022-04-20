@@ -1,0 +1,67 @@
+{% extends 'base/base.html' %}
+{% block content %}
+<section class="content">
+      <div class="container-fluid">
+          <div class="row">
+              <div class="col-md-12">
+            <!-- general form elements -->
+                  <h3>Edit todo</h3>
+            <div class="card card-primary">
+
+              <!-- /.card-header -->
+              <!-- form start -->
+
+              <form role="form" action="/edit_todo_save" method="post">
+                  {% csrf_token %}
+                <div class="card-body">
+                  <div class="form-group">
+                    <label>Title</label>
+                      {{ todo_item.todo }}
+                    <input type="hidden" name="title" value="{{ todo_item.id }}">
+                  </div>
+                  <div class="form-group">
+                    <label>Date</label>
+                      {{ todo_item.date }}
+                  </div>
+                    <div class="form-group">
+                    <label>Completed ?</label>
+                    <select class="form-control" name="done">
+                        <option {% if todo_item.done == "Done" %} selected {% endif %} >Done</option>
+                        <option {% if todo_item.done == "Not Yet" %} selected {% endif %}>Not Yet</option>
+                    </select>
+                  </div>
+
+                      <div class="form-group">
+                      {% if messages %}
+                        {% for message in messages %}
+                        {% if message.tags == 'error' %}
+                        <div class="alert alert-danger" style="margin-top:10px">{{ message }}</div>
+                        {% endif %}
+                        {% if message.tags == 'success' %}
+                        <div class="alert alert-success" style="margin-top:10px">{{ message }}</div>
+                        {% endif %}
+                        {% endfor %}
+                      {% endif %}
+                    </div>
+
+                </div>
+                <!-- /.card-body -->
+
+                <div class="card-footer">
+                  <button class="w-100 btn btn-lg btn-primary" type="submit">Edit item</button>
+                </div>
+              </form>
+                <br>
+
+            </div>
+            <!-- /.card -->
+
+
+
+          </div>
+          </div>
+      </div>
+</section>
+
+
+{% endblock content %}
